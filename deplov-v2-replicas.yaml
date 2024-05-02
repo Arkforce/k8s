@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-web-deploy-replicas
+  labels:
+    app: my-k8s-app
+    owner: aziz
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      project: CIA 
+  template:
+    metadata:
+      labels:
+        project: CIA 
+    spec:
+      containers:
+      - name: cia-web
+        image: azizkhodzhaev/k8sphp
+        ports:
+        - containerPort: 80

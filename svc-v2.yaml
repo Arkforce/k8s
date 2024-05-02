@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-web-deploy
+  labels:
+    app: my-k8s-app
+    owner: aziz
+spec:
+  selector:
+    matchLabels:
+      project: kgb
+  template:
+    metadata:
+      labels:
+        project: kgb
+    spec:
+      containers:
+      - name: snb-web
+        image: azizkhodzhaev/k8sphp
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-single-pod-svc
+  labels:
+    owner: azizkhodzhaev
+spec:
+  selector:
+    project: kgb # selecting pods with these Labels
+  ports:
+    - name: app-listener
+      protocol: TCP
+      port: 80 # port of Load Balancer 
+      targetPort: #80 Port of POD
+  type: LoadBalancer

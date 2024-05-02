@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-web-deploy
+  labels:
+    app: my-k8s-app
+    owner: aziz
+spec:
+  selector:
+    matchLabels:
+      project: SNB
+  template:
+    metadata:
+      labels:
+        project: SNB
+    spec:
+      containers:
+      - name: snb-web
+        image: azizkhodzhaev/k8sphp
+        ports:
+        - containerPort: 80

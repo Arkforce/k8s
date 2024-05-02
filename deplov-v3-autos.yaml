@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-web-deploy-autoscaling
+  labels:
+    app: my-k8s-app
+    owner: aziz
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      project: kgb 
+  template:
+    metadata:
+      labels:
+        project: kgb 
+    spec:
+      containers:
+      - name: kgb-web
+        image: adv4000/k8sphp:version1
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-web-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-web-deploy
+  minReplicas: 2  # Adjust minimum number of replicas as needed
+  maxReplicas: 5  # Adjust maximum number of replicas as needed
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50  # Adjust target CPU utiliza
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80  # Adjust target CPU utiliza
